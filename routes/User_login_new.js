@@ -1,25 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const Admin = require("../models/Admin");
+const User = require("../models/User");
 require("dotenv").config();
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookiParser = require("cookie-parser");
-const AdminSchema = require("./../models/Admin");
+const UserSchema = require("./../models/User");
 
 router.use(cookiParser());
 
 router.post("/", async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(req.body);
-        const admin_collection = await Admin.findOne({ email }).lean();
+        // console.log(req.body)
+        const admin_collection = await User.findOne({ email }).lean();
         if (!admin_collection)
             return res.status(400).json({ message: "email is wrong ", status: "warning" });
 
-        const hash_psw = admin_collection.password;
-
-        if (!bcryptjs.compareSync(password, hash_psw))
+        // const hash_psw = admin_collection.password;
+        // console.log(admin_collection.password)
+        
+         const valid_password =bcrypt.compare(password, admin_collection.password);
+         
+         if(!valid_password)
             return res.status(400).json({ message: "  passord is wrong ", status: "warning" });
 
 
@@ -42,9 +45,8 @@ router.post("/", async (req, res) => {
         //     id: admin._id,
         //     email: admin.email,
         // };
-
         res.setHeader("x-auth-token", token);
-        res.cookie("auth-token", token);
+        res.cookie("auth_token", token);
 
         res.status(200).json({ message: "login success", status: "success", token: token });
 
@@ -74,7 +76,7 @@ router.get("/check_valid_token", async (req, res) => {
   const id_from_token = have_valid_tokem.id;
 
   //Check Same id have database
-  const user = await AdminSchema.findOne({ id_from_token }).lean();
+  const user = await UserSchema.findOne({ id_from_token }).lean();
 
   if (user == undefined || user == null || user == "") {
     res.json(false);
@@ -94,7 +96,7 @@ router.get("/checkLogin", (req, res) => {
         const id_from_token = have_valid_token.id;
 
         // check same id have same database
-        const user_id = Admin.findById(id_from_token);
+        const user_id = User.findById(id_from_token);
         if (user_id == undefined) {
             res.json(false)
         }

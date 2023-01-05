@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 // schema
-const user_sehema = new mongoose.Schema({
+const admin_sehema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -38,4 +38,4 @@ const user_sehema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("users", user_sehema);
+module.exports = mongoose.model("admin", admin_sehema);

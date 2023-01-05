@@ -4,28 +4,28 @@ const Register_Models = require("../models/UserSignup");
 
 async function resiter_validation(req, res, next) {
   try {
-    const { name, phone, address, email, password, age } = req.body;
+    const { name, username, phone, address, email, password, age } = req.body;
 
     // checking all field is filled or not
-    if (!name || !phone || !address || !email || !password || !age)
+    if (!name || !username || !phone || !address || !email || !password || !age)
       return res.status(400).json({
         message: "Please fill all fields",
         status: "warning",
       });
 
-    // if Username already exist
-    // const check_username = await Register_Models.findOne({ username });
-    // if (check_username)
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Username is already exists", status: "warning" });
+    // if username already exist
+    const check_username = await Register_Models.findOne({ username });
+    if (check_username)
+      return res
+        .status(400)
+        .json({ message: "username is already exists", status: "warning" });
 
     // check username is less than 5 char
-    // if (username.length < 5)
-    //   return res.status(400).json({
-    //     message: "Please enter username of atleast 5 characters",
-    //     status: "warning",
-    //   });
+    if (username.length < 5)
+      return res.status(400).json({
+        message: "Please enter username of atleast 5 characters",
+        status: "warning",
+      });
 
     // check password is less than 6 char
     if (password.length < 6)

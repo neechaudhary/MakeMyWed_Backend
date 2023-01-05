@@ -38,4 +38,4 @@ const user_sehema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("users", user_sehema);
+module.exports = mongoose.model("user", user_sehema);
