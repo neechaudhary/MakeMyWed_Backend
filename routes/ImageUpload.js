@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User_Schema = require("../models/User");
-const upload = require("express-fileupload")
 const app = express()
-app.use(upload())
+
 
 // router.get("/", (req, res) => {
 //     res.json({ message: "Image Getting Api" })

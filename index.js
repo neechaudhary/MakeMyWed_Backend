@@ -4,7 +4,8 @@ const cors = require("cors");
 const PORT = 4000;
 const multer = require("multer");
 const cookieParser = require("cookie-parser");
-const upload = require("express-fileupload");
+
+
 const fs = require("fs");
 
 const webSocketServer = require("websocket").server;
@@ -16,10 +17,10 @@ const wsServer = new webSocketServer({
   httpServer: server,
 });
 
-app.use(upload());
 
 app.use(cookieParser());
-
+app.use(express.static(__dirname+"/medias_web"));
+app.use(express.static(__dirname+"/medias_app"));
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -93,6 +94,12 @@ app.use("/api/request_quote", require("./routes/request_quote"));
 
 //review\
 app.use("/api/review", require("./routes/review"));
+
+//website request
+app.use("/api/website_request", require("./routes/web_req"));
+
+//app request
+app.use("/api/app_request", require("./routes/app_req"));
 
 
 
