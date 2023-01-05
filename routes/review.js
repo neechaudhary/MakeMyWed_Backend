@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 
 //add a review
-router.post("/", async(req,res) =>{
+router.post("/",validation, async(req,res) =>{
     const token= req.cookies.auth_token || req.body.token || req.headers["x-auth-token"];
    if(token === undefined || token === null || token === ""){
          return res.status(401).json("You are not authorized"); 
@@ -48,7 +48,7 @@ router.get("/:id", async(req,res) =>{
 });
 
 //update a review
-router.patch("/:id", async(req,res) =>{
+router.patch("/:id",validation, async(req,res) =>{
     const review_collection= await reviewSchema.findByIdAndUpdate(req.params.id, req.body);
     try {
         
@@ -68,5 +68,17 @@ router.delete("/:id", async(req,res) =>{
         res.status(400).send(error);
     }
 });
+
+async function validation (req,res,next){
+   
+        const {name, email, review}= req.body;
+        if( name === "" || email === "" || review === "" || 
+             name === null || email === null || review === null ||
+             name === undefined || email === undefined || review === undefined)
+             {return res.status(400).json("Please fill all the fields");} 
+             next();
+            
+    }
+
 
 module.exports= router;

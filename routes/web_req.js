@@ -85,5 +85,57 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+//validation for website request
+async function validation(req, res, next) {
+  const {
+    frontend,
+    backend,
+    database,
+    webType,
+    name,
+    email,
+    phoneNumber,
+    message,
+    totalEstimate,
+    numberOfPages,
+  } = req.body;
+  if (
+    frontend === undefined ||
+    frontend === null ||
+    frontend === "" ||
+    backend === undefined ||
+    backend === null ||
+    backend === "" ||
+    database === undefined ||
+    database === null ||
+    database === "" ||
+    webType === undefined ||
+    webType === null ||
+    webType === "" ||
+    name === undefined ||
+    name === null ||
+    name === "" ||
+    email === undefined ||
+    email === null ||
+    email === "" ||
+    phoneNumber === undefined ||
+    phoneNumber === null ||
+    phoneNumber === "" ||
+    message === undefined ||
+    message === null ||
+    message === "" ||
+    totalEstimate === undefined ||
+    totalEstimate === null ||
+    totalEstimate === "" ||
+    numberOfPages === undefined ||
+    numberOfPages === null ||
+    numberOfPages === ""
+  ) {
+    return res.status(400).json("All fields are required");
+  }
+  next();
+}
+
+
 
 module.exports = router;
